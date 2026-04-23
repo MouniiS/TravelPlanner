@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Plans</title>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pQeBSpnLtB9/omkF4x9h5+Y3G6O+Fqf1i3kBRrZrE3YpP68KX4kG0S+7a2nQz5a2Y4kL1HjPbGgnT3azv+k0Kw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    /* ====== Background and General Styles ====== */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      color: #333;
+    }
+
+    /* Overlay for darkening and slight blur */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4); /* dark overlay */
+      backdrop-filter: blur(3px);   /* slight blur */
+      z-index: -1;
+    }
+
+    header {
+      position: relative;
+      background: rgba(42, 42, 72, 0.8);
+      color: white;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      font-style: italic;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      border-bottom: 2px solid #ff6b87;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    #homeBtn {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      padding: 10px 20px;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #homeBtn:hover {
+      background: #ff6b87;
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: rgba(255,255,255,0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    th {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    tr:hover {
+      background: #e0f7fa;
+      transition: all 0.3s ease;
+    }
+
+    button.deleteBtn {
+      padding: 6px 12px;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button.deleteBtn:hover {
+      background: #ff6b87;
+      transform: scale(1.05);
+    }
+
+    /* ====== Fade-in animation for empty message ====== */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .empty {
+      text-align: center;
+      color: gray;
+      font-size: 18px;
+      margin-top: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .empty.show {
+      animation: fadeIn 0.5s forwards;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-suitcase-rolling"></i> My Travel Plans</h1>
+    <button id="homeBtn"><i class="fas fa-house"></i> Home</button>
+  </header>
+
+  <main>
+    <table id="plansTable">
+      <thead>
+        <tr>
+          <th>Destination</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>People</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="plansBody">
+        <!-- Plans will appear here -->
+      </tbody>
+    </table>
+    <p id="emptyMsg" class="empty">No plans added yet!</p>
+  </main>
+
+  <script>
+    const plansBody = document.getElementById("plansBody");
+    const emptyMsg = document.getElementById("emptyMsg");
+
+    function loadPlans() {
+      let plans = JSON.parse(localStorage.getItem("myPlans")) || [];
+      plans = plans.filter(plan => plan && plan.destination && plan.name);
+
+      plansBody.innerHTML = "";
+      if (plans.length === 0) {
+        emptyMsg.classList.add("show");
+      } else {
+        emptyMsg.classList.remove("show");
+        plans.forEach((plan, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${plan.destination}</td>
+            <td>${plan.name}</td>
+            <td>${plan.email || ""}</td>
+            <td>${plan.phone || ""}</td>
+            <td>${plan.date || ""}</td>
+            <td>${plan.time || ""}</td>
+            <td>${plan.people || ""}</td>
+            <td>
+              <button class="deleteBtn" onclick="deletePlan(${index})">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </td>
+          `;
+          plansBody.appendChild(row);
+        });
+      }
+
+      localStorage.setItem("myPlans", JSON.stringify(plans));
+    }
+
+    function deletePlan(index) {
+      let plans = JSON.parse(localStorage.getItem("myPlans")) || [];
+      plans.splice(index, 1);
+      localStorage.setItem("myPlans", JSON.stringify(plans));
+      loadPlans();
+    }
+
+    const homeBtn = document.getElementById("homeBtn");
+    homeBtn.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    window.onload = loadPlans;
+  </script>
+</body>
+</html>

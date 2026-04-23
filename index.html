@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Travel Planner</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #111827;
+      --card-bg: rgba(255,255,255,0.8);
+      --nav-bg: rgba(255,255,255,0.7);
+      --btn-bg: linear-gradient(135deg,#06b6d4,#3b82f6);
+    }
+    body.dark-mode {
+      --bg-color: #0f172a;
+      --text-color: #f8fafc;
+      --card-bg: rgba(30,41,59,0.85);
+      --nav-bg: rgba(15,23,42,0.6);
+      --btn-bg: linear-gradient(135deg,#6366f1,#8b5cf6);
+    }
+    * {margin:0; padding:0; box-sizing:border-box; font-family:Poppins,sans-serif;}
+    body { background:var(--bg-color); color:var(--text-color); transition:0.4s; overflow-x:hidden; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:var(--nav-bg); backdrop-filter:blur(12px); position:sticky; top:0; z-index:1000;}
+    header h1{ font-size:1.8rem; }
+    .header-buttons{ display:flex; align-items:center; gap:12px;}
+    #theme-toggle{ background:none; border:none; font-size:1.5rem; cursor:pointer;}
+    .logout-btn, .plans-btn ,.about-btn{ background-color:#fff; padding:6px 16px; border-radius:20px; box-shadow:3px 3px 5px rgba(0,0,0,0.3); cursor:pointer; font-weight:bold; border:none;}
+    .hero{ position:relative; height:100vh; overflow:hidden;}
+    .hero-video{ position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-2;}
+    .hero-overlay{ position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.45); z-index:-1;}
+    .hero-content{ height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:#fff;}
+    .hero-content h1{ font-size:3.5rem; margin-bottom:10px; text-shadow:2px 2px 10px rgba(0,0,0,0.6);}
+    .hero-content p{ font-size:1.5rem; margin-bottom:20px;}
+    .btn{ display:inline-block; padding:12px 25px; background:var(--btn-bg); border:none; border-radius:30px; color:#fff; font-weight:bold; cursor:pointer; transition:0.3s; text-decoration:none;}
+    .btn:hover{ transform:scale(1.05); box-shadow:0 6px 20px rgba(0,0,0,0.25);}
+    .destinations{ padding:70px 20px; text-align:center;}
+    .destinations h2{ font-size:2.8rem; margin-bottom:50px;}
+    .cards{ display:flex; justify-content:center; gap:30px; flex-wrap:wrap;}
+    .card{ background:var(--card-bg); border-radius:18px; overflow:hidden; width:320px; box-shadow:0 6px 20px rgba(0,0,0,0.15); transition:transform 0.4s, box-shadow 0.4s; backdrop-filter:blur(10px);}
+    .card img{ width:100%; height:220px; object-fit:cover;}
+    .card h3{ margin:20px; font-size:1.5rem;}
+    .card p{ margin:0 20px 20px; font-size:0.95rem; color:var(--text-color);}
+    .card .btn{ margin:0 20px 20px; width:calc(100% - 40px);}
+    .card:hover{ transform:translateY(-12px) scale(1.02); box-shadow:0 12px 30px rgba(0,0,0,0.25);}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Travel Planner</h1>
+  <div class="header-buttons">
+    <button id="theme-toggle">🌙</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    <button class="plans-btn" onclick="window.location.href='plans.html'">My Plans</button>
+    <button class="about-btn" onclick="window.location.href='about.html'">About</button>
+  </div>
+</header>
+
+<section class="hero">
+  <video autoplay muted loop playsinline class="hero-video">
+    <source src="assets/hero.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>🌍 Explore the World</h1>
+    <p>Your next adventure awaits</p>
+    <a href="#destinations" class="btn">Discover Destinations</a>
+  </div>
+</section>
+
+<section id="destinations" class="destinations">
+  <h2>Top Destinations</h2>
+  <div class="cards"></div>
+</section>
+
+<script>
+const toggleBtn = document.getElementById("theme-toggle");
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+});
+
+// ===================== Destinations Data (50+) =====================
+const destinationsData = [
+  {name: "Bali, Indonesia", image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", desc:"Tropical beaches & vibrant culture."},
+  {name: "New York, USA", image:"https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80", desc:"Broadway, skyscrapers & Central Park."},
+  {name: "Tokyo, Japan", image:"https://t3.ftcdn.net/jpg/04/98/23/10/360_F_498231018_6w6Zt0h2PdU4Muy5Tvph2VeNG67yTuwl.jpg", desc:"Bustling streets, temples & skyscrapers."},
+  {name: "Sydney, Australia", image:"https://www.curiousgoosetravel.com/wp-content/uploads/2023/07/6262bd_c26714b4525c439db96c8c876676f5e3mv2.jpg", desc:"Opera House, Harbour Bridge & beaches."},
+  {name: "Rome, Italy", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi1omkNzuPW2KPP7vHxkcWSuSX1eL7qc-BZw&s", desc:"Colosseum, Vatican & ancient streets."},
+  {name: "Cairo, Egypt", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoNuw-U1hnyMlNQIJRuHIvP3_GmFoACxxGvw&s", desc:"Pyramids of Giza, Sphinx & Egyptian culture."},
+  {name: "Barcelona, Spain", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0e8VzmPGiAUQ2jyesdE26JRfXai3elTafdQ&s", desc:"Gaudí architecture, lively streets & beaches."},
+  {name: "Dubai, UAE", image:"https://images.pexels.com/photos/162031/dubai-tower-arab-khalifa-162031.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500", desc:"Modern skyscrapers, desert adventures & luxury."},
+  {name: "Rio de Janeiro, Brazil", image:"https://static.toiimg.com/thumb/msid-117746153,width-400,resizemode-4/117746153.jpg", desc:"Christ the Redeemer, Carnival & beaches."},
+  {name: "Amsterdam, Netherlands", image:"https://lp-cms-production.imgix.net/2023-03/GettyImages-937057490.jpeg?sharp=10&vib=20&w=1200&w=600&h=400", desc:"Canals, museums & cycling culture."},
+  {name: "Istanbul, Turkey", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6xOQhAFpubscf8x7TqkiKVRNOJabFOvKV8A&s", desc:"Mosques, markets & historic streets."},
+  {name: "Santorini, Greece", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vH9Czx5jSNXvdMkOcbzu6FrK6GvxqAzHJg&s", desc:"Whitewashed houses, blue domes & sunsets."},
+  {name: "Bangkok, Thailand", image:"https://images.unsplash.com/photo-1543872084-c7bd3822856f?auto=format&fit=crop&w=800&q=80", desc:"Temples, street food & nightlife."},
+  {name: "Venice, Italy", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaGLuPt5uy3Y5_uTsF1odc5wkjiveqyFIGgA&s", desc:"Canals, gondolas & romantic streets."},
+  {name: "Prague, Czech Republic", image:"https://blog.northernhikes.com/wp-content/uploads/2018/12/690084.jpg", desc:"Castles, bridges & historic squares."},
+  {name: "Los Angeles, USA", image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80", desc:"Hollywood, beaches & entertainment capital."},
+  {name: "Singapore, Singapore", image:"https://static.toiimg.com/thumb/msid-107700466,width-748,height-499,resizemode=4,imgsize-119838/.jpg", desc:"Futuristic city, gardens & Marina Bay Sands."},
+  {name: "Hong Kong, China", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT44MjXwAx1vCDoU_wz3yZd6KKcgdwUaw2OjA&s", desc:"Skyscrapers, Victoria Harbour & nightlife."},
+  {name: "Lisbon, Portugal", image:"https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?auto=format&fit=crop&w=800&q=80", desc:"Historic trams, colorful streets & ocean views."},
+  {name: "Moscow, Russia", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaVmafBinB9ZuloguVmGN98gSRANndvCQeiQ&s", desc:"Red Square, Kremlin & historic architecture."},
+  {name: "Seoul, South Korea", image:"https://tz-mag-media.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2021/06/15110256/wp-jeju-island-attractions.jpg", desc:"Palaces, street markets & nightlife."},
+  {name: "Vienna, Austria", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFCkmB1Rs_3x-nkZnkYOLMfRYxtGTXSoi4Iw&s", desc:"Historic cafes, palaces & music culture."},
+  {name: "Cape Town, South Africa", image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", desc:"Table Mountain, beaches & wildlife."},
+  {name: "Hanoi, Vietnam", image:"https://clubmahindra.gumlet.io/blog/media/section_images/7-dayvietn-4bef26b27a670c1.jpg?w=376&dpr=2.6", desc:"Old quarter, street food & lakes."},
+  {name: "Mexico City, Mexico", image:"https://skyticket.com/guide/wp-content/uploads/2019/06/5298edde69ac67488f4aa2b156f67036.jpg", desc:"Historic centers, museums & culture."},
+  {name: "Toronto, Canada", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSebQY40QHc6JIDxnsmUJATymLJTPUiK-JWHQ&s", desc:"CN Tower, lakes & vibrant city life."},
+  {name: "Mumbai, India", image:"https://images.unsplash.com/photo-1508138221679-760a23a2285b?auto=format&fit=crop&w=800&q=80", desc:"Gateway of India, markets & beaches."},
+  {name: "Buenos Aires, Argentina", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgJyYVzgBDwQfnyiN_vyqsJhcHey7fqMhmQ&s", desc:"Tango, colorful streets & cafes."},
+  {name: "Lima, Peru", image:"https://images.unsplash.com/photo-1506812574058-fc75fa93fead?auto=format&fit=crop&w=800&q=80", desc:"Historic center, food & culture."},
+  {name: "Athens, Greece", image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", desc:"Acropolis, historic streets & Mediterranean vibes."},
+  {name: "Berlin, Germany", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTe3CDM_hsw2w9nqG8kXUlULinmiLH64ZEyMA&s", desc:"Berlin Wall, museums & nightlife."},
+  {name: "Edinburgh, Scotland", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpKI7RYv1Pcb96Gm9X9CV6450kEDooRxg99w&s", desc:"Castle, historic streets & festivals."},
+  {name: "Helsinki, Finland", image:"https://static.toiimg.com/thumb/98999182/Finland.jpg?width=1200&height=900", desc:"Design, saunas & coastal views."},
+  {name: "Oslo, Norway", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEF5CCMMGR3TJmaDG_9nrd4sGNbNq_jsgR3Q&s", desc:"Fjords, museums & scenic landscapes."},
+  {name: "Stockholm, Sweden", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO1i47u-MOkHVUsUaOo1cbFAeE11PJCCqg-A&s", desc:"Canals, archipelago & culture."},
+  {name: "Dubai Marina, UAE", image:"https://www.gokite.travel/wp-content/uploads/schema-and-structured-data-for-wp/The-Top-6-Best-Cities-to-Visit-in-the-UAE-1200x900.webp", desc:"Skyscrapers, yachts & luxury lifestyle."},
+  {name: "Kuala Lumpur, Malaysia", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT72aR3BO8l2zSEJLergnp48MfzPfD9wnXYIg&s", desc:"Petronas Towers, markets & culture."},
+  {name: "Marrakech, Morocco", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSej0l-tT7H0NqxqjyNvLlLX2u9gWNWD89R8Q&s", desc:"Souks, palaces & desert vibes."},
+  {name: "Jakarta, Indonesia", image:"https://etimg.etb2bimg.com/photo/115997634.cms", desc:"Skyscrapers, culture & vibrant streets."},
+  {name: "Paris, France", image:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80", desc:"City of Love with Eiffel Tower & amazing food."},
+  {name: "Lyon, France", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRthxHe1K6RFiO_m9uuJfIuOxA83B6qc13ORA&s", desc:"Historic streets, rivers & gastronomy."},
+  {name: "Naples, Italy", image:"https://cdn.britannica.com/82/195482-050-2373E635/Amalfi-Italy.jpg", desc:"Pizza, coast & historic sites."},
+  {name: "Osaka, Japan", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4vaBCRADlEadSDL4r9Fvlltdj0tPgf1iRjA&s", desc:"Street food, temples & nightlife."},
+  {name: "Quebec City, Canada", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbk988BDf3mgb8BElb-LoAsqn-DgMV1nefog&s", desc:"Historic city, rivers & castles."},
+  {name: "Vancouver, Canada", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Concord_Pacific_Master_Plan_Area.jpg/1200px-Concord_Pacific_Master_Plan_Area.jpg", desc:"Mountains, oceans & city life."},
+{name: "Prague, Czech Republic", image:"https://images.unsplash.com/photo-1506466010722-395aa2bef877?auto=format&fit=crop&w=800&q=80", desc:"Historic squares, castles & bridges."},
+{name: "Santiago, Chile", image:"https://images.unsplash.com/photo-1504712598893-24159a89200e?auto=format&fit=crop&w=800&q=80", desc:"Andes mountains, vineyards & city life."},
+{name: "San Francisco, USA", image:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", desc:"Golden Gate, cable cars & bay views."},
+{name: "London, UK", image:"https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=800&q=80", desc:"Big Ben, Thames & historic landmarks."},
+{name: "Petra, Jordan", image:"https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80", desc:"Rock-cut architecture, desert & history."},
+{name: "Luxor, Egypt", image:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", desc:"Ancient temples, Nile views & history."}
+]
+// ===================== Generate Cards =====================
+const cardsContainer = document.querySelector(".cards");
+destinationsData.forEach(dest => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.setAttribute("data-destination", dest.name.split(",")[0]);
+  card.innerHTML = `
+    <img src="${dest.image}" alt="${dest.name}">
+    <h3>${dest.name}</h3>
+    <p>${dest.desc}</p>
+    <button class="btn book-btn" data-url="booking.html?destination=${encodeURIComponent(dest.name.split(",")[0])}">Book Now</button>
+  `;
+  cardsContainer.appendChild(card);
+});
+//===============================logout=====================
+function logout() {
+  // Clear user session / plans if needed
+  localStorage.removeItem("myPlans"); // optional: remove saved plans
+    // Show alert
+  alert("Logout successful ✅");
+  // Redirect to login page
+  window.location.href = "login.html"; // change to your login page URL
+}
+
+// ================= Book Now click =================
+document.addEventListener("click", function(e){
+  if(e.target && e.target.classList.contains("book-btn")){
+    const btn = e.target;
+    const card = btn.closest(".card");
+    const destination = card.querySelector("h3").innerText;
+    const image = card.querySelector("img").src;
+    const url = btn.dataset.url;
+
+    const bookingTime = new Date().toLocaleString();
+    let plans = JSON.parse(localStorage.getItem("myPlans")) || [];
+    const newPlan = {destination, image, bookingTime};
+
+    if(!plans.some(plan => plan.destination === destination)){
+      plans.push(newPlan);
+      localStorage.setItem("myPlans", JSON.stringify(plans));
+      alert(destination + " added to your plans ✅");
+      if(url) window.location.href = url;
+    } else {
+      alert(destination + " is already in your plans!");
+    }
+  }
+});
+</script>
+
+</body>
+</html>

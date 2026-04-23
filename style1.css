@@ -1,0 +1,259 @@
+/* ===== Body & Background Image ===== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== Dark Overlay for readability ===== */
+body::before {
+  content: '';
+  position: absolute;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.5); /* adjust darkness */
+  z-index: 0;
+}
+
+/* ===== Auth Container ===== */
+.auth-container {
+  position: relative;
+  z-index: 1; /* above overlay */
+  background: rgba(255,255,255,0.95);
+  padding: 35px 40px;
+  border-radius: 15px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+  width: 320px;
+  text-align: center;
+  opacity: 0;
+  animation: slideIn 0.8s ease forwards;
+}
+
+/* Slide/Fade animation */
+@keyframes slideIn {
+  0% { transform: translateY(-50px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== Heading ===== */
+.auth-container h2 {
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 24px;
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+/* ===== Inputs ===== */
+.auth-container input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.auth-container input:nth-of-type(1) { animation-delay: 0.2s; }
+.auth-container input:nth-of-type(2) { animation-delay: 0.4s; }
+.auth-container input:nth-of-type(3) { animation-delay: 0.6s; }
+.auth-container input:nth-of-type(4) { animation-delay: 0.8s; }
+
+.auth-container input:focus {
+  border-color: #2575fc;
+  box-shadow: 0 0 8px rgba(37,117,252,0.5);
+}
+
+/* ===== Button ===== */
+.auth-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 1s;
+}
+
+.auth-container button:hover {
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* ===== Links ===== */
+.auth-container a {
+  display: inline-block;
+  margin-top: 12px;
+  text-decoration: none;
+  color: #2575fc;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.2s;
+}
+
+.auth-container a:hover {
+  color: #6a11cb;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+/* ===== Body & Moving Background Image ===== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+  position: relative;
+  overflow: hidden;
+  animation: moveBG 30s linear infinite;
+}
+
+/* ===== Overlay for readability ===== */
+body::before {
+  content: '';
+  position: absolute;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.5);
+  z-index: 0;
+}
+
+/* ===== Background Move Animation ===== */
+@keyframes moveBG {
+  0% { background-position: 50% 50%; }
+  25% { background-position: 52% 48%; }
+  50% { background-position: 50% 52%; }
+  75% { background-position: 48% 50%; }
+  100% { background-position: 50% 50%; }
+}
+
+/* ===== Auth Container ===== */
+.auth-container {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.95);
+  padding: 35px 40px;
+  border-radius: 15px;
+  box-shadow: 20px 12px 10px #000000;
+  width: 320px;
+  text-align: center;
+  opacity: 0;
+  animation: slideIn 0.8s ease forwards;
+}
+
+/* ===== Slide/Fade animation ===== */
+@keyframes slideIn {
+  0% { transform: translateY(-50px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== Heading ===== */
+.auth-container h2 {
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 24px;
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+/* ===== Inputs ===== */
+.auth-container input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.auth-container input:nth-of-type(1) { animation-delay: 0.2s; }
+.auth-container input:nth-of-type(2) { animation-delay: 0.4s; }
+.auth-container input:nth-of-type(3) { animation-delay: 0.6s; }
+.auth-container input:nth-of-type(4) { animation-delay: 0.8s; }
+
+.auth-container input:focus {
+  border-color: #2575fc;
+  box-shadow: 0 0 8px rgba(37,117,252,0.5);
+}
+
+/* ===== Button ===== */
+.auth-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 1s;
+  box-shadow: 1px 1px 2px rgb(245, 245, 245);
+}
+
+.auth-container button:hover {
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* ===== Links ===== */
+.auth-container a {
+  display: inline-block;
+  margin-top: 12px;
+  text-decoration: none;
+  color: #2575fc;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.2s;
+}
+
+.auth-container a:hover {
+  color: #6a11cb;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}

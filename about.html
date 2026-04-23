@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Travel Planner</title>
+  <style>
+  /* Global Styles */
+  body {
+    font-family: 'Arial', sans-serif;
+    margin:0;
+    padding:0;
+    line-height:1.6;
+    color:#eee;
+    background: #121212;
+  }
+
+  header {
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding: 15px 40px;
+    background: linear-gradient(90deg, #1f1f1f, #333);
+    color:white;
+  }
+
+  header h1 { margin:0; }
+  header nav a { color:#eee; margin-left:20px; text-decoration:none; font-weight:bold; }
+  header nav a.active { text-decoration: underline; color:#4facfe; }
+
+  /* Hero */
+  .about-hero {
+    position: relative;
+    height: 350px;
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+  }
+
+  .hero-overlay { position:absolute; inset:0; background: rgba(0,0,0,0.6); }
+  .hero-content { position: relative; color: #fff; }
+  .hero-content h1 { font-size: 3rem; }
+  .hero-content p { font-size: 1.2rem; margin-top: 10px; color:#ddd; }
+
+  /* About Sections */
+  .about-content { max-width: 1000px; margin:50px auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:30px; padding:0 20px; }
+  .content-container {
+    background: #1e1e1e;
+    padding: 25px;
+    border-radius:12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s;
+  }
+  .content-container:hover { transform: translateY(-5px); }
+  .content-container h2 { color:#4facfe; }
+  .content-container p { color:#ccc; }
+
+  /* Testimonials */
+  .testimonials { max-width:900px; margin:50px auto; padding:0 20px; text-align:center; }
+  .testimonials h2 { color:#4facfe; margin-bottom:30px; }
+  .testimonial-cards { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+  .testimonial { background:#1e1e1e; padding:20px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.4); transition: transform 0.3s; }
+  .testimonial:hover { transform: translateY(-5px); }
+  .testimonial p { font-style:italic; margin-bottom:10px; color:#ccc; }
+  .testimonial h4 { color:#4facfe; }
+
+  /* Stats */
+  .stats { max-width:1000px; margin:50px auto; display:flex; justify-content:space-around; flex-wrap:wrap; gap:20px; text-align:center; }
+  .stat { background:#1e1e1e; padding:25px; border-radius:12px; flex:1 1 150px; box-shadow:0 6px 15px rgba(0,0,0,0.4); }
+  .stat h3 { font-size:2rem; color:#4facfe; margin-bottom:5px; }
+  .stat p { color:#ccc; }
+
+  /* Recent Questions */
+  .recent-questions { max-width:900px; margin:50px auto; padding:0 20px; }
+  .recent-questions h2 { margin-bottom:30px; text-align:center; color:#4facfe; }
+
+  /* FAQ Search Bar */
+  .faq-search {
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+    position: relative;
+  }
+
+  .faq-search input {
+    width: 100%;
+    padding: 12px 45px 12px 20px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    background: #1e1e1e;
+    color: #eee;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-size: 1rem;
+    transition: 0.3s;
+  }
+
+  .faq-search input::placeholder { color: #bbb; }
+
+  .faq-search input:focus { box-shadow: 0 0 0 3px #4facfe; }
+
+  /* Search Icon inside input */
+  .faq-search::before {
+    content: "🔍";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #bbb;
+    pointer-events: none;
+  }
+
+  .recent-questions .faq-item {
+    background:#1e1e1e;
+    padding:20px;
+    margin:10px 0;
+    border-radius:12px;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s;
+  }
+  .recent-questions .faq-item:hover { transform: translateY(-3px); }
+  .recent-questions .faq-item h3 { color:#4facfe; margin:0; }
+  .recent-questions .faq-item p { max-height:0; overflow:hidden; margin:0; padding:0; color:#ccc; transition: max-height 0.3s ease, padding 0.3s ease; }
+
+  /* CTA */
+  .cta { background: linear-gradient(90deg, #4facfe, #06b6d4); color:white; text-align:center; padding:50px 20px; margin:50px 0; border-radius:12px; }
+  .cta h2 { margin-bottom:20px; }
+  .btn { display:inline-block; padding:12px 25px; background: #06b6d4; border:none; border-radius:30px; color:#fff; font-weight:bold; cursor:pointer; text-decoration:none; transition:0.3s; }
+  .btn:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,0,0,0.25); }
+
+  /* Footer */
+  footer { text-align:center; padding:20px; background: linear-gradient(90deg, #1f1f1f, #333); color:white; }
+
+  </style>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Travel Planner</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="plans.html">My Plans</a>
+      <a href="about.html" class="active">About</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="about-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>About Travel Planner</h1>
+      <p>Your companion for unforgettable journeys 🌍</p>
+    </div>
+  </section>
+
+  <!-- About Sections -->
+  <section class="about-content">
+    <div class="content-container">
+      <h2>Our Mission</h2>
+      <p>At Travel Planner, we aim to make your travel experience seamless and enjoyable. Discover new destinations, plan trips, and keep track of your adventures all in one place.</p>
+    </div>
+    <div class="content-container">
+      <h2>Our Vision</h2>
+      <p>We envision a world where travel is accessible, organized, and inspiring for everyone. Our platform provides tools, tips, and resources for both casual travelers and seasoned explorers.</p>
+    </div>
+    <div class="content-container">
+      <h2>Why Choose Us?</h2>
+      <p>Easy-to-use interface, beautiful design, and the ability to save and manage your travel plans make us stand out. With real-time updates and destination info, your adventure starts here!</p>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>What Travelers Say</h2>
+    <div class="testimonial-cards">
+      <div class="testimonial">
+        <p>"Travel Planner made my Europe trip super organized and stress-free!"</p>
+        <h4>- Emma W.</h4>
+      </div>
+      <div class="testimonial">
+        <p>"Love the UI & saving plans feature. Highly recommend!"</p>
+        <h4>- Raj K.</h4>
+      </div>
+      <div class="testimonial">
+        <p>"The best platform to plan and track my trips. Very user-friendly."</p>
+        <h4>- Sara M.</h4>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stat"><h3>100+</h3><p>Destinations Covered</p></div>
+    <div class="stat"><h3>5000+</h3><p>Trips Planned</p></div>
+    <div class="stat"><h3>10000+</h3><p>Satisfied Travelers</p></div>
+  </section>
+
+  <!-- People Recently Asked -->
+  <section class="recent-questions">
+    <h2>People Recently Asked</h2>
+
+    <div class="faq-search">
+      <input type="text" id="faqSearch" placeholder="Search questions...">
+    </div>
+
+    <div class="faq-item">
+      <h3>How can I cancel or modify my trip?</h3>
+      <p>You can cancel or modify your trips from the 'My Plans' page anytime before the scheduled date.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is there a mobile app for Travel Planner?</h3>
+      <p>Yes! Our mobile app is available for both iOS and Android, giving you access to your plans on the go.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do you provide travel guides or itineraries?</h3>
+      <p>Absolutely! We provide suggested itineraries for popular destinations and tips from experienced travelers.</p>
+    </div>
+      <div class="faq-item">
+    <h3>Can I share my travel plans with friends?</h3>
+    <p>Yes, you can easily share your plans via email or social media directly from the platform.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Are there recommendations for budget travel?</h3>
+    <p>We provide tips, deals, and budget-friendly options for most destinations to help you save money.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Do you offer travel insurance options?</h3>
+    <p>While we don’t sell insurance directly, we provide trusted partner links for travel insurance plans.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Can I book flights and hotels through Travel Planner?</h3>
+    <p>Currently, our platform helps you plan and organize your trips; we provide links to booking platforms for flights and hotels.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Is my data safe on Travel Planner?</h3>
+    <p>Absolutely! We use secure encryption and follow strict privacy policies to protect your information.</p>
+  </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Ready for Your Next Adventure?</h2>
+    <a href="index.html" class="btn">Start Planning</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Travel Planner. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // GSAP Scroll Animations
+    gsap.from(".hero-content h1", {y:-50, opacity:0, duration:1, ease:"power3.out"});
+    gsap.from(".hero-content p", {y:20, opacity:0, duration:1, delay:0.3, ease:"power2.out"});
+
+    gsap.utils.toArray(".content-container, .testimonial, .stat, .faq-item").forEach((el,i)=>{
+      gsap.from(el,{scrollTrigger:{trigger:el,start:"top 90%",toggleActions:"play none none reset"}, y:50, opacity:0, duration:1, delay:i*0.15, ease:"power3.out"});
+    });
+
+    // Accordion-style FAQ Toggle
+    document.querySelectorAll(".faq-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const p = item.querySelector("p");
+        if(p.style.maxHeight){
+          p.style.maxHeight = null;
+          p.style.padding = "0";
+        } else {
+          p.style.maxHeight = p.scrollHeight + "px";
+          p.style.padding = "10px 0 0 0";
+        }
+      });
+    });
+
+    // FAQ Search Filter
+    const faqSearch = document.getElementById('faqSearch');
+    faqSearch.addEventListener('input', () => {
+      const query = faqSearch.value.toLowerCase();
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const question = item.querySelector('h3').textContent.toLowerCase();
+        if(question.includes(query)){
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
